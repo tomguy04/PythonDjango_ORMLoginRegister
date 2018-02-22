@@ -13,12 +13,19 @@ def index(request):
   return render(request,"logreg_app/registrationForm.html")
 
 def doregister(request):
+    errors = User.objects.basic_validator(request.POST)
+    if len(errors):
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
+        return redirect('/')
+
     # u1 = User(first_name = request.POST['first_name'], last_name = request.POST['last_name'], email = request.POST['email'],     password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()))
-    u1 = User(first_name = request.POST['first_name'], last_name = request.POST['last_name'], email = request.POST['email'],     password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()))
-    u1.save()
-    # request.session['id']=u1.id
-    request.session['first_name']=u1.first_name
-    return redirect('/dashboard')
+    else:
+        u1 = User(first_name = request.POST['first_name'], last_name = request.POST['last_name'], email = request.POST['email'], password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()))
+        u1.save()
+        # request.session['id']=u1.id
+        request.session['first_name']=u1.first_name
+        return redirect('/dashboard')
 
 def login(request):
     post_password = request.POST['password']
@@ -62,21 +69,6 @@ def dashboard(request):
             'message' : 'you registerd.'
         }
         return render(request, "logreg_app/dashboard.html", context) 
-    
-    # if 'id' in request.session:
-    #     print "***************id is in session
-    #     context = {
-    #         'user' : User.objects.get(id = request.session['id']),
-    #         'message' : 'you logged in.'
-    #     }
-    # else:
-    #     print "***************id is NOT in session
-    #     context = {
-    #             'user' : User.objects.get(id = request.session['id']),
-    #             'message' : 'you registered.'
-    #         }
-        
-    # return render(request, "logreg_app/dashboard.html", context) 
 
 def logout(request):
   request.session.clear()
