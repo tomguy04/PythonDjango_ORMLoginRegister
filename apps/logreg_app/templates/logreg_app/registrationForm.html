@@ -1,0 +1,57 @@
+<!-- # "/process": the route your form should submit to. 
+    In your process function, print the user's name and redirect to root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- style sheet here -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logreg_app/css/style.css' %}" media="screen" title="no title"  charset="utf-8">
+    <title>Document</title>
+</head>
+    <body>
+        <div id="wrapper">
+            {{request.session.id}}
+            --REGISTER--
+            <!-- REGISTRATION -->
+            <form action='/doregister' method='post'>
+                {% csrf_token %}
+                <div id='fields'>
+                    <p>First Name:</p>
+                    <p>Last Name: </p>
+                    <p>Email:</p>
+                    <p>Password:</p>
+                    <p>Password Confirmation</p>
+                </div>
+                <div class='values'>
+                    <p><input type='text' name='first_name'></p>
+                    <p><input type='text' name='last_name'></p>
+                    <p><input type='text' name='email'></p>
+                    <p><input type='text' name='password'></p>
+                    <p><input type='text' name='confpassword'></p>
+                </div>
+                <input type='submit' value='Submit'>
+            </form>
+            <HR>
+
+            <!-- LOGIN -->
+            --OR LOGIN---
+            <form action="/login" method="POST">
+                {% csrf_token %}
+                <div id='fields'>
+                    <P>email:</P>    
+                    <P>password:</P>  
+                </div>
+                <div class='values'>
+                    <input type="text" name="email" placeholder="email">
+                    <input type="password" name="password" placeholder="password">
+                    <input type="submit" name="">
+                </div>
+            </form>
+
+        </div>
+    </body>
+</html>
